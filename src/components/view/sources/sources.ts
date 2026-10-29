@@ -2,9 +2,13 @@
 import { ISource } from '../../../types';
 
 class Sources {
-    draw(data: ISource[]): void {
+    public draw(data: ReadonlyArray<ISource>): void {
         const fragment = document.createDocumentFragment();
-        const sourceItemTemp = document.querySelector('#sourceItemTemp') as HTMLTemplateElement;
+        const sourceItemTemp = document.querySelector('#sourceItemTemp') as HTMLTemplateElement | null;
+
+        if (!sourceItemTemp) {
+            return;
+        }
 
         data.forEach((item: ISource) => {
             const sourceClone = sourceItemTemp.content.cloneNode(true) as DocumentFragment;
@@ -14,7 +18,7 @@ class Sources {
                 name.textContent = item.name;
             }
 
-            const sourceItem = sourceClone.querySelector('.source__item') as HTMLElement;
+            const sourceItem = sourceClone.querySelector('.source__item') as HTMLElement | null;
             if (sourceItem) {
                 sourceItem.setAttribute('data-source-id', item.id);
             }

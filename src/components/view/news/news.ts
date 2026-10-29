@@ -2,11 +2,15 @@
 import { IArticle } from '../../../types';
 
 class News {
-    draw(data: IArticle[]): void {
+    public draw(data: ReadonlyArray<IArticle>): void {
         const news = data.length >= 10 ? data.filter((_item: IArticle, idx: number) => idx < 10) : data;
 
         const fragment = document.createDocumentFragment();
-        const newsItemTemp = document.querySelector('#newsItemTemp') as HTMLTemplateElement;
+        const newsItemTemp = document.querySelector('#newsItemTemp') as HTMLTemplateElement | null;
+
+        if (!newsItemTemp) {
+            return;
+        }
 
         news.forEach((item: IArticle, idx: number) => {
             const newsClone = newsItemTemp.content.cloneNode(true) as DocumentFragment;
@@ -16,7 +20,7 @@ class News {
                 newsItem.classList.add('alt');
             }
 
-            const photo = newsClone.querySelector('.news__meta-photo') as HTMLElement;
+            const photo = newsClone.querySelector('.news__meta-photo') as HTMLElement | null;
             if (photo) {
                 photo.style.backgroundImage = 'url(' + (item.urlToImage || './img/news_placeholder.jpg') + ')';
             }
@@ -46,7 +50,7 @@ class News {
                 content.textContent = item.description || '';
             }
 
-            const readMore = newsClone.querySelector('.news__read-more a') as HTMLAnchorElement;
+            const readMore = newsClone.querySelector('.news__read-more a') as HTMLAnchorElement | null;
             if (readMore) {
                 readMore.setAttribute('href', item.url);
             }

@@ -3,21 +3,21 @@ import Sources from './sources/sources';
 import { IArticlesResponse, ISourcesResponse } from '../../types';
 
 export class AppView {
-    private news: News;
-    private sources: Sources;
+    private readonly news: News;
+    private readonly sources: Sources;
 
-    constructor() {
-        this.news = new News();
-        this.sources = new Sources();
+    constructor(news?: News, sources?: Sources) {
+        this.news = news || new News();
+        this.sources = sources || new Sources();
     }
 
-    drawNews(data: IArticlesResponse): void {
-        const values = data?.articles ? data.articles : [];
+    public drawNews(data: IArticlesResponse): void {
+        const values = data?.articles ? Array.from(data.articles) : [];
         this.news.draw(values);
     }
 
-    drawSources(data: ISourcesResponse): void {
-        const values = data?.sources ? data.sources : [];
+    public drawSources(data: ISourcesResponse): void {
+        const values = data?.sources ? Array.from(data.sources) : [];
         this.sources.draw(values);
     }
 }

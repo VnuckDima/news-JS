@@ -1,28 +1,28 @@
 ﻿import AppLoader from './appLoader';
-import { IArticlesResponse, ISourcesResponse } from '../../types';
+import { IArticlesResponse, ISourcesResponse, Endpoint } from '../../types';
 
 class AppController extends AppLoader {
-    getSources(callback: (data: ISourcesResponse) => void): void {
+    public getSources(callback: (data: ISourcesResponse) => void): void {
         super.getResp(
             {
-                endpoint: 'sources',
+                endpoint: Endpoint.SOURCES,
             },
             callback
         );
     }
 
-    getNews(e: Event, callback: (data: IArticlesResponse) => void): void {
+    public getNews(e: Event, callback: (data: IArticlesResponse) => void): void {
         let target = e.target as HTMLElement;
         const newsContainer = e.currentTarget as HTMLElement;
 
-        while (target !== newsContainer) {
+        while (target !== newsContainer && target.parentNode) {
             if (target.classList.contains('source__item')) {
                 const sourceId = target.getAttribute('data-source-id');
                 if (sourceId && newsContainer.getAttribute('data-source') !== sourceId) {
                     newsContainer.setAttribute('data-source', sourceId);
                     super.getResp(
                         {
-                            endpoint: 'everything',
+                            endpoint: Endpoint.EVERYTHING,
                             options: {
                                 sources: sourceId,
                             },
@@ -32,11 +32,7 @@ class AppController extends AppLoader {
                 }
                 return;
             }
-            if (target.parentNode) {
-                target = target.parentNode as HTMLElement;
-            } else {
-                break;
-            }
+            target = target.parentNode as HTMLElement;
         }
     }
 }

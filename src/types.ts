@@ -1,6 +1,6 @@
 ﻿export interface ISource {
-    id: string;
-    name: string;
+    readonly id: string;
+    readonly name: string;
     description?: string;
     url?: string;
     category?: string;
@@ -9,30 +9,30 @@
 }
 
 export interface IArticleSource {
-    id: string | null;
-    name: string;
+    readonly id: string | null;
+    readonly name: string;
 }
 
 export interface IArticle {
-    source: IArticleSource;
-    author: string | null;
-    title: string;
-    description: string | null;
-    url: string;
-    urlToImage: string | null;
-    publishedAt: string;
-    content: string | null;
+    readonly source: IArticleSource;
+    readonly author: string | null;
+    readonly title: string;
+    readonly description: string | null;
+    readonly url: string;
+    readonly urlToImage: string | null;
+    readonly publishedAt: string;
+    readonly content: string | null;
 }
 
 export interface ISourcesResponse {
-    status: string;
-    sources: ISource[];
+    readonly status: string;
+    readonly sources: ReadonlyArray<ISource>;
 }
 
 export interface IArticlesResponse {
-    status: string;
-    totalResults: number;
-    articles: IArticle[];
+    readonly status: string;
+    readonly totalResults: number;
+    readonly articles: ReadonlyArray<IArticle>;
 }
 
 export enum HttpMethod {
@@ -42,7 +42,16 @@ export enum HttpMethod {
     DELETE = 'DELETE',
 }
 
+export enum Endpoint {
+    SOURCES = 'sources',
+    EVERYTHING = 'everything',
+}
+
 export interface ILoaderOptions {
-    endpoint: string;
+    endpoint: Endpoint | string;
     options?: Record<string, string>;
 }
+
+export type PartialArticle = Partial<IArticle>;
+export type PickedSource = Pick<ISource, 'id' | 'name'>;
+export type SourceId = ISource['id'];
